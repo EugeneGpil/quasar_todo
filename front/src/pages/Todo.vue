@@ -1,5 +1,21 @@
 <template>
   <q-page class="bg-grey-3 column">
+    <div class="row q-pa-sm bg-primary">
+      <q-input
+          v-model="newTask"
+          class="col"
+          filled square
+          placeholder="Add task"
+          bg-color="white"
+          dense
+          @keyup.enter="addTask"
+      >
+        <template v-slot:append>
+          <q-btn round dense flat icon="add" @click="addTask" />
+        </template>
+      </q-input>
+    </div>
+
     <q-list class="list" separator bordered>
       <q-item
           v-for="(task, index) in tasks"
@@ -24,15 +40,21 @@
               color="primary"
               @click="removeTask(index)"
           />
-          <!--          @click="tasks = [...tasks.filter((_, taskIndex) => index !== taskIndex)]"-->
         </q-item-section>
       </q-item>
     </q-list>
+
+    <div v-if="tasks.length === 0" class="no-tasks absolute-center">
+      <q-icon name="check" size="100px" color="primary"/>
+      <div class="text-h5 text-center text-primary">
+        No tasks
+      </div>
+    </div>
   </q-page>
 </template>
 
 <script setup>
-import {reactive} from 'vue'
+import {ref, reactive} from 'vue'
 
 const tasks = reactive([
   {
@@ -52,14 +74,12 @@ const tasks = reactive([
 import {useQuasar} from 'quasar'
 
 const $q = useQuasar()
-
 const removeTask = (index) => {
   $q
       .dialog({
         title:      'Delete',
         message:    'Delete task?',
         cancel:     true,
-        persistent: true,
       })
       .onOk(() => {
         tasks.splice(index, 1)
@@ -70,6 +90,16 @@ const removeTask = (index) => {
         })
       })
 }
+
+const newTask = ref('')
+const addTask = () => {
+  tasks.push({
+    title: newTask.value,
+    done: false,
+  })
+  newTask.value = ''
+}
+
 </script>
 
 <script>
@@ -92,5 +122,9 @@ export default defineComponent({
       color: $text-secondary;
     }
   }
+}
+
+.no-tasks {
+  opacity: 0.5;
 }
 </style>

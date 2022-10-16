@@ -4,7 +4,10 @@ dev:
 	docker compose exec nodejs_dev bash
 
 node:
-	cd container && docker compose exec nodejs bash
+	cd container && docker compose exec nodejs_dev bash
+
+root-node:
+	cd container && docker compose exec --user=root nodejs_dev bash
 
 stop:
 	cd container &&\
