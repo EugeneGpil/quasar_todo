@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
 
-  nodejs_dev:
+  nodejs:
     build:
       context: nodejs
       args:
@@ -19,8 +19,6 @@ services:
     ports:
       - "9000:9000" # for vite dev websocket
     restart: unless-stopped
-    profiles:
-      - dev
 
   nginx_dev:
     build:
@@ -32,6 +30,16 @@ services:
       - ../front:/usr/share/nginx/front
     restart: unless-stopped
     ports:
-      - ${PORT_NGINX}:80
-    profiles:
-      - dev
+      - ${PORT_NGINX_DEV}:80
+
+  nginx_prod:
+    build:
+      context: nginx_prod
+      args:
+        - NGINX_VERSION=${NGINX_VERSION}
+    working_dir: /usr/share/nginx/front
+    volumes:
+      - ../front:/usr/share/nginx/front
+    restart: unless-stopped
+    ports:
+      - ${PORT_NGINX_PROD}:80

@@ -1,15 +1,13 @@
 dev:
 	cd container &&\
-	docker compose --profile dev up --build --remove-orphans --detach &&\
-	docker compose exec nodejs_dev bash
+	docker compose up --build --remove-orphans --detach &&\
+	docker compose exec nodejs bash
 
 node:
-	cd container && docker compose exec nodejs_dev bash
+	cd container && docker compose exec nodejs bash
 
 root-node:
-	cd container && docker compose exec --user=root nodejs_dev bash
+	cd container && docker compose exec --user=root nodejs bash
 
 stop:
-	cd container &&\
-	docker compose --profile dev stop &&\
-	docker compose --profile prod stop
+	cd container && docker compose stop
